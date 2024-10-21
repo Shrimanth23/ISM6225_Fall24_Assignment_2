@@ -52,7 +52,7 @@ namespace Assignment_2
 
             // Question 8: Fibonacci Number
             Console.WriteLine("Question 8:");
-            int n = 4;
+            int n = 5;
             int fibonacciNumber = Fibonacci(n);
             Console.WriteLine(fibonacciNumber);
         }
@@ -62,22 +62,60 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return new List<int>(); // Placeholder
+                IList<int> missingNumbers = new List<int>();
+                //Initializing the listfor storing missing numbers.
+                for (int i = 0; i < nums.Length; i++)
+                {
+                  //Marking the  numbers by negating the value at the index corresponding to the number
+                    int index = Math.Abs(nums[i]) - 1;
+                    //If the number at index is positive,it would be negated to mark it.
+                    if (nums[index] > 0)
+                    
+                    { nums[index] = -nums[index]; }
+                    
+                }
+                //TO FInd rmeining positive indices
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    //missed values indicate positve numbers
+                    if (nums[i] > 0)
+                    {
+                        missingNumbers.Add(i + 1);
+                    }
+                }
+
+                return missingNumbers;
             }
             catch (Exception)
             {
                 throw;
             }
         }
-
         // Question 2: Sort Array by Parity
         public static int[] SortArrayByParity(int[] nums)
         {
             try
             {
-                // Write your code here
-                return new int[0]; // Placeholder
+                //a new array to store sorted result
+                int[] result = new int[nums.Length];
+                int start = 0, end = nums.Length - 1;
+                //sorting the elements in array such that even numbers preceede odd numbers
+                foreach (var num in nums)
+
+                    //if even placed at the start else place at the end
+                {
+                    
+                    if (num % 2 == 0)
+                    {
+                        result[start++] = num;
+                    }
+                    else
+                    
+                        { result[end--] = num; }
+                    
+                }
+
+                return result;
             }
             catch (Exception)
             {
@@ -90,8 +128,21 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return new int[0]; // Placeholder
+                //dictionary to stor the numbers and indices
+                Dictionary<int, int> dict = new Dictionary<int, int>();
+                //Interating through the array to find two numbers that add to target
+                for (int i = 0; i < nums.Length; i++)
+                {
+                    int complement = target - nums[i];
+                    //to check if a compliment exists
+                    if (dict.ContainsKey(complement))
+                    {
+                        return new int[] { dict[complement], i };
+                    }
+                    dict[nums[i]] = i;
+                }
+
+                return new int[0];
             }
             catch (Exception)
             {
@@ -102,38 +153,92 @@ namespace Assignment_2
         // Question 4: Find Maximum Product of Three Numbers
         public static int MaximumProduct(int[] nums)
         {
-            try
+            // Check if the input array is null
+            if (nums == null)
             {
-                // Write your code here
-                return 0; // Placeholder
+                //exception if the array is null
+                throw new ArgumentNullException(nameof(nums), "Input array cannot be null");
             }
-            catch (Exception)
+
+            // Check if the array has at least 3 elements
+            if (nums.Length < 3)
             {
-                throw;
+              
+                throw new ArgumentException("Array must contain at least 3 elements");
             }
-        }
+
+            // Sort the array in ascending order to find the largest and smallest numbers
+            Array.Sort(nums);
+
+            // Get the length of the array
+            int n = nums.Length;
+
+            // Calculate the maximum product by :
+            // 1. Product of the three largest numbers
+            // 2. Product of the two smallest (which might be negative) and the largest number
+            return Math.Max(
+                nums[n - 1] * nums[n - 2] * nums[n - 3],
+                nums[0] * nums[1] * nums[n - 1]
+            );
+        
+    }
 
         // Question 5: Decimal to Binary Conversion
-        public static string DecimalToBinary(int decimalNumber)
+        public static string DecimalToBinary(int inputNumber)
         {
-            try
+            // Check if the input number is negative
+            if (inputNumber < 0)
             {
-                // Write your code here
-                return "101010"; // Placeholder
+                // Throw an exception if the input is negative
+                throw new ArgumentException("Input must be a non-negative integer.");
             }
-            catch (Exception)
+
+            // Special case for zero
+            if (inputNumber == 0)
             {
-                throw;
+                // Return "0" directly for zero
+                return "0";
             }
+
+            string binaryResult = "";
+
+            // Convert the integer number to binary using repeated division by 2
+            while (inputNumber > 0)
+            {
+                // Get the remainder when divided by 2 (0 or 1) and prepend to result
+                binaryResult = (inputNumber % 2) + binaryResult;
+
+                // Update the input number by dividing it by 2
+                inputNumber /= 2;
+            }
+
+            // Return the final binary result
+            return binaryResult;
         }
+
 
         // Question 6: Find Minimum in Rotated Sorted Array
         public static int FindMin(int[] nums)
         {
             try
             {
-                // Write your code here
-                return 0; // Placeholder
+                int left = 0, right = nums.Length - 1;
+                //binary search to find the minimum in a sorted array
+                while (left < right)
+                {
+                    int mid = (left + right) / 2;
+                    //if the middle element >right, minimumwill be to right else minumu is in left half
+                    if (nums[mid] > nums[right])
+                    {
+                        left = mid + 1;
+                    }
+                    else
+                    {
+                        right = mid;
+                    }
+                }
+
+                return nums[left];
             }
             catch (Exception)
             {
@@ -146,8 +251,20 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return false; // Placeholder
+                //negative numbers cannot be palindromes
+                if (x < 0) return false;
+
+                int reversed = 0, original = x;
+
+                //reverse the integer
+                while (x > 0)
+                {
+                    int digit = x % 10;
+                    reversed = reversed * 10 + digit;
+                    x /= 10;
+                }
+                //check if original number is equal to the reversed number
+                return original == reversed;
             }
             catch (Exception)
             {
@@ -160,8 +277,19 @@ namespace Assignment_2
         {
             try
             {
-                // Write your code here
-                return 0; // Placeholder
+                //fibonacci(0)=0,fibonacci(1)=1 are the base cases 
+                if (n <= 1) return n;
+
+                int a = 0, b = 1, fib = 0;
+                //iterative calculation of fibanocci series
+                for (int i = 2; i <= n; i++)
+                {
+                    fib = a + b;
+                    a = b;
+                    b = fib;
+                }
+
+                return fib;
             }
             catch (Exception)
             {
